@@ -45,7 +45,7 @@ The first of the functions we need to define is ```getImageData()```, which will
 
 Most of the images we're reading in are represented by 3D matrices, which can be thought of as a stack of 3 versions of the same image; one red, one green, one blue. Since our network doesn't need to know anything about the colour of the image, we're going to 'flatten' the 3D matrix into a 2D matrix, effectively turning the colour image into a greyscale one. This has two main advantages:
 
-1. The network has less information per image to worry about, which will make it faster to process each image.
+1. The network has less information per image to worry about, which will make it faster at processing each image.
 2. All of the 2D images can be 'stacked' on top of one another to create one large 3D matrix, which represents one complete dataset. This 3D matrix is what our function is going to return.
 
 ```python
