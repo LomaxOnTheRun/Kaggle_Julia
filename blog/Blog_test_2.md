@@ -33,8 +33,66 @@ def pickleFiles():
 
 This is obviously not yet code that we can run - we still need to define all the functions we call. Nonetheless, it's still useful insofar as it gives us a clear idea of what we need to do. Just before we get down to creating all of the required functions, we'll take a quick look at why we need validation and test datasets, as well as our training set.
 
-###Why do we need validation and test datasets?
+###Why do we need validation *and* test datasets?
 
 The reason for having a test dataset is very simple: we need to know how good our network is at identifying images *it has never seen before*.
 
 The reason for having a validation dataset is slightly more subtle. Whilst we won't ever show the network any of the images from the validation dataset either, we will be using it to monitor the progress of our network, and to change the hyper-parameters of the network accordingly. In this way, some of the information about the validation dataset will bleed through to the network. To stop the same thing from happening to our test dataset, we will only ever check how accurate our network is against it once, after it has completely finished training.
+
+###Getting the image data
+
+The first of the functions we need to define is ```getImageData()```, which will go through all of the 20x20 images in our trainResized folder, and turn them into a Numpy array. The image files are named 'X.Bmp' where X is a number going from 1 to 6283, which makes it very easy for us to load them in order. Keeping them in this order is very important, as we need them to match up with their corresponding labels in the CSV file.
+
+Most of the images we're reading in are represented by 3D matrices, which can be thought of as a stack of 3 versions of the same image; one red, one green, one blue. Since our network doesn't need to know anything about the colour of the image, we're going to 'flatten' the 3D matrix into a 2D matrix, effectively turning the colour image into a greyscale one. This has two main advantages:
+
+1. The network has less information per image to worry about, which will make it faster to process each image.
+2. All of the 2D images can be 'stacked' on top of one another to create one large 3D matrix, which represents one complete dataset. This 3D matrix is what our function is going to return.
+
+```python
+import os
+import numpy as np
+from scipy import ndimage
+
+def getImageData():
+	'''Creates a numpy array of the image dataset'''
+	
+	# Image info
+	imageSize = 20
+	pixelDepth = 255.0
+	
+	# Find how many images exist
+	folder = 'trainResized'
+	numImages = len(os.listdir(folder))
+	
+	# Create a single numpy array placeholder for the whole dataset
+	datasetShape = (numImages, imageSize, imageSize)
+	dataset = np.ndarray(shape=datasetShape, dtype=np.float32)
+	
+	for imageNum in xrange(numImages):
+		
+		# Get each image
+		imageName = '%s.Bmp' % (imageNum+1)
+		imageFile = os.path.join(folder, imageName)
+		imageData = ndimage.imread(imageFile).astype(float)
+		
+		# Pre-process each image
+		imageData = imageData - (pixelDepth / 2)	# Centre the colour values around zero
+		imageData = imageData / pixelDepth			# Reduce the standard deviation to 1
+		if len(imageData.shape) == 3:
+			imageData = imageData.mean(axis=2)		# Flatten image into a 2D greyscale image
+		
+		# Put image into the numpy array
+		dataset[imageNum, :, :] = imageData
+    
+	# Show dataset stats
+	print 'Full dataset tensor:', dataset.shape
+	print 'Mean:', np.mean(dataset)
+	print 'Standard deviation:', np.std(dataset)
+	
+	return dataset
+```
+
+Unlike our high level script, this one can actually be run as it is. You just need to add ```getImageData()``` to the bottom of your script, and you should see the dataset stats printed out when you run it.
+
+###What's with the pre-processing stuff?
+
