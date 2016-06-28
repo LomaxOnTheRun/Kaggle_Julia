@@ -35,7 +35,7 @@ This is obviously not yet code that we can run - we still need to define all the
 
 ###Why do we need validation *and* test datasets?
 
-The reason for having a test dataset is very simple: we need to know how good our network is at identifying images *it has never seen before*.
+The reason for having a test dataset is very simple: we need to know how good our network is at identifying images it has *never seen before*.
 
 The reason for having a validation dataset is slightly more subtle. Whilst we won't ever show the network any of the images from the validation dataset either, we will be using it to monitor the progress of our network, and to change the hyper-parameters of the network accordingly. In this way, some of the information about the validation dataset will bleed through to the network. To stop the same thing from happening to our test dataset, we will only ever check how accurate our network is against it once, after it has completely finished training.
 
