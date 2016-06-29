@@ -98,15 +98,13 @@ Unlike our high level script, this one can actually be run as it is. You just ne
 
 In addition to flattening the images, we've also carried out two further actions:
 
-
 1. We centred the values of the pixels around zero.
  
 We've done this to better 'define' the problem. Gradient descent methods (which we'll be using) have a much easier time working with well-defined problems, which will manifest itself as a faster learning rate and more accurate results. (MORE INFO AND PICS)
 
 Centred problem | Uncentred problem
 ----------------|--------------------
-
-![Pic1](/images/GradientDescent_centred_small.png) | ![Pic2](images/GradientDescent_uncentred_small.png)
+![Pic1](/images/GradientDescent_centred_small.png) | ![Pic2](/images/GradientDescent_uncentred_small.png)
 
 2. We restricted the range of values the pixels can take to between -1 and 1.
 
