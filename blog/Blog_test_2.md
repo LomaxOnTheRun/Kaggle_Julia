@@ -98,12 +98,9 @@ Unlike our high level script, this one can actually be run as it is. You just ne
 
 In addition to flattening the images, we've also carried out two further actions:
 
-1. We centred the values of the pixels around zero.
- 
-We've done this to better 'define' the problem. Gradient descent methods (which we'll be using) have a much easier time working with well-defined problems, which will manifest itself as a faster learning rate and more accurate results. **(MORE INFO AND PICS?)**
+1. *We centred the values of the pixels around zero.* We've done this to better 'define' the problem. Gradient descent methods (which we'll be using) have a much easier time working with well-defined problems, which will manifest itself as a faster learning rate and more accurate results. **(MORE INFO AND PICS?)**
 
-2. We restricted the range of values the pixels can take to between -1 and 1.
-
-This will help us to reduce floating point errors. When dealing with floating point numbers (e.g. Python's ```float``` numbers), small rounding errors occur as the processor is not able to hold infinitely long decimal places in memory. This only really starts becomeing a problem when trying to calculate tiny difference between very large numbers and, while 255 may not look very large, it becomes problematic when we use large networks with very large matrices. Remember, we'll be trying to squeeze out every possible bit of accuracy from our network, so even a fraction of a percent will make a difference.
+2. *We restricted the range of values the pixels can take to between -1 and 1.* This will help us to reduce floating point errors. When dealing with floating point numbers (e.g. Python's ```float``` numbers), small rounding errors occur as the processor is not able to hold infinitely long decimal places in memory. This only really starts becomeing a problem when trying to calculate tiny difference between very large numbers and, while 255 may not look very large, it becomes problematic when we use large networks with very large matrices. Remember, we'll be trying to squeeze out every possible bit of accuracy from our network, so even a fraction of a percent will make a difference.
 
 ###Getting the labels
+
