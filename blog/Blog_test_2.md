@@ -2,7 +2,7 @@
 
 ###Overview
 
-In this session, we will download the training data from Kaggle, pre-process it, and then save it to a Pickle file using Python.
+In this session we will download the training data from Kaggle, pre-process it, and then save it to a Pickle file using Python.
 
 ###Downloading the data
 
