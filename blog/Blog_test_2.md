@@ -106,7 +106,7 @@ We've done this to better 'define' the problem. Gradient descent methods (which 
 Centred problem | Uncentred problem
 ----------------|--------------------
 
-![Centred problem](/images/GradientDescent_centred.png) | Pic 2
+![Pic1](/images/GradientDescent_centred_small.png) | ![Pic2](images/GradientDescent_uncentred_small.png)
 
 2. We restricted the range of values the pixels can take to between -1 and 1.
 
