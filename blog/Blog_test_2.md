@@ -101,10 +101,13 @@ We can run a quick check to make sure that our images still look like we expect 
 ```python
 import matplotlib.pyplot as plt
 
-images = getImageData()
-for i in xrange(10):
-	plt.imshow(images[i])
+def showImage(image):
+	plt.imshow(image)
 	plt.show()
+
+images = getImageData()
+for i in xrange(5):
+	showImage(images[i])
 ```
 
 You can also check these against the pictures in the 'trainResized' folder which holds all of the coloured training images. This check is useful as it both checks that the images haven't gotten scrambled somehow, and that they haven't been knocked out of order.
@@ -239,16 +242,42 @@ And there we have it, all the pieces we need to download, preprocess and store t
 When I talk about sanity checks, I am referring to the quick and easy checks we can run to make sure that the code is doing, well, *sane* things. We've already done this a couple of times throughout this script, checking that the images and labels made sense after manipulating them. We're now going to make sure they've also been stored properly, by loading them from our Pickle file and looking at them again.
 
 ```python
+import pickle
+import matplotlib.pyplot as plt
+
+def getLabel(labelId):
+	if    0 <= labelId <= 9:		label = labelId + ord('0')
+	elif 10 <= labelId <= 35:		label = labelId + ord('A') - 10
+	elif 36 <= labelId <= 61:		label = labelId + ord('a') - 36
+	return chr(int(label))
+
+def showImage(image):
+	plt.imshow(image)
+	plt.show()
+
 with open('julia.pickle', 'rb') as f:
 	save = pickle.load(f)
-	trainDataset = save['train_dataset']
-	trainLabels = save['train_labels']
-	validDataset = save['valid_dataset']
-	validLabels = save['valid_labels']
-	testDataset = save['test_dataset']
-	testLabels = save['test_labels']
+	trainDataset = save['trainDataset']
+	trainLabels = save['trainLabels']
+	validDataset = save['validDataset']
+	validLabels = save['validLabels']
+	testDataset = save['testDataset']
+	testLabels = save['testLabels']
 	del save  # Hint to help garbage collection free up memory
 
-for i in xrange(5):
-	
+for i in xrange(3):
+	print 'Training label: %s' % getLabel(trainLabels[i])
+	showImage(trainDataset[i])
+	print 'Validation label: %s' % getLabel(validLabels[i])
+	showImage(validDataset[i])
+	print 'Test label: %s' % getLabel(testLabels[i])
+	showImage(testDataset[i])
 ```
+
+Performing these sanity checks frequently will stop you from making stupid mistakes and assumptions that will come back to haunt you down the line. This is especially true of neural networks, as it is much harder to 'open up' a neural network and look inside it to see what it's doing.
+
+My first encounter with this was when I failed to check the images were being imported in the correct order, and I ended up with labels being put on random images. It took me a day and a half to work out why my network just kept guessing the most common training letter, 'A', when I finally ran a sanity check to make sure my images and labels matched up. Sanity checks might seem like a nuicance at the time, but if you get into the habit of doing them as you go along, you'll save yourself a world of problems.
+
+###The full script
+
+Here's the link to the full script of everything we've looked at in this post: 
