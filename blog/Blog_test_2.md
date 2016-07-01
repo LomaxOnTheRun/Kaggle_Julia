@@ -31,7 +31,7 @@ def pickleFiles():
 	saveData('julia.pickle', imageData, labels)
 ```
 
-This is obviously not yet code that we can run - we still need to define all the functions we call. Nonetheless, it's still useful insofar as it gives us a clear idea of what we need to do. Just before we get down to creating all of the required functions, we'll take a quick look at why we need validation and test datasets, as well as our training dataset.
+This is obviously not yet code we can run - we still need to define all the functions we call. Nonetheless, it's useful insofar as it gives us a clear idea of what we need to do. Just before we get down to creating all of the required functions, we'll take a quick look at why we need validation and test datasets, as well as our training dataset.
 
 ###Why do we need validation *and* test datasets?
 
