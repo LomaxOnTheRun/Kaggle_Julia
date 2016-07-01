@@ -94,9 +94,24 @@ def getImageData():
 
 Unlike our high level script, this one can actually be run as it is. You just need to add ```getImageData()``` to the bottom of your script, and you should see the dataset stats printed out when you run it.
 
+###Check your images
+
+We can run a quick check to make sure that our images still look like we expect them to look. All we need to do is run a few more lines of code under the function we've just defined.
+
+```python
+import matplotlib.pyplot as plt
+
+images = getImageData()
+for i in xrange(10):
+	plt.imshow(images[i])
+	plt.show()
+```
+
+You can also check these against the pictures in the 'trainResized' folder which holds all of the coloured training images. This check is useful as it both checks that the images haven't gotten scrambled somehow, and that they haven't been knocked out of order.
+
 ###What's with the pre-processing stuff?
 
-In addition to flattening the images, we've also carried out two further actions:
+In addition to flattening the images, we've also carried out two further actions in our ```getImageData``` function:
 
 1. *We centred the values of the pixels around zero.* We've done this to better 'define' the problem. Gradient descent methods (which we'll be using) have a much easier time working with well-defined problems, which will manifest itself as a faster learning rate and more accurate results. **(MORE INFO AND PICS?)**
 
@@ -209,7 +224,7 @@ def saveData(pickleFile, imageData, labels):
 			'validDataset': validationData,
 			'validLabels': validationLabels,
 			'testDataset': testData,
-			'testLabels': testLabels,
+			'testLabels': testLabels
 			}
 		pickle.dump(save, f, pickle.HIGHEST_PROTOCOL)
 	
@@ -217,3 +232,23 @@ def saveData(pickleFile, imageData, labels):
 	print 'Compressed pickle size: %s' % os.stat(pickleFile).st_size
 ```
 
+And there we have it, all the pieces we need to download, preprocess and store the data we'll be using for our networks. We shouldn't have to mess around with this script any more, at least for as long as we're happy using 20x20 images. Just before we make our first neural network, I did want to mention something I've found extraordinarily useful throughout my coding career.
+
+###Sanity checks
+
+When I talk about sanity checks, I am referring to the quick and easy checks we can run to make sure that the code is doing, well, *sane* things. We've already done this a couple of times throughout this script, checking that the images and labels made sense after manipulating them. We're now going to make sure they've also been stored properly, by loading them from our Pickle file and looking at them again.
+
+```python
+with open('julia.pickle', 'rb') as f:
+	save = pickle.load(f)
+	trainDataset = save['train_dataset']
+	trainLabels = save['train_labels']
+	validDataset = save['valid_dataset']
+	validLabels = save['valid_labels']
+	testDataset = save['test_dataset']
+	testLabels = save['test_labels']
+	del save  # Hint to help garbage collection free up memory
+
+for i in xrange(5):
+	
+```
