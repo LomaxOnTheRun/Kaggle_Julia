@@ -104,3 +104,116 @@ In addition to flattening the images, we've also carried out two further actions
 
 ###Getting the labels
 
+We can now pull our labels out from the 'trainLabels.csv' we've already downloaded.
+
+```python
+import csv
+
+def getLabels():
+	'''Returns the alphanumeric labels from trainLabels.csv'''
+
+	# Get all labels from CSV file
+	labels = []
+	with open('trainLabels.csv') as f:
+		reader = csv.DictReader(f)
+		for line in reader:
+			labels.append(line['Class'])
+	
+	return labels
+```
+
+If you run this script and take a look at the list this returns, you'll see it's full of one character strings with labels 0-9, A-Z and a-z, all jumbled up. If you open the csv file using another program, you can also check by eye that the first few rows match. Now, since our network can't handle alphanumeric labels, we need to turn all of them into purely numerical ones, which will each have a corresponding output node. We do this by assigning each alphanumeric label an ID, ranging between 0 and 61. How you decide to do this is somewhat arbitrary, as long as each label is given a unique ID in that range. I've chosen to allocate IDs sequentially to each number, then to each uppercase letter, then to each lowercase letter. The code now looks like this:
+
+```python
+import csv
+
+def getLabels():
+	'''Returns the numeric IDs of the labels from trainLabels.csv'''
+	
+	# Get all labels from CSV file
+	labels = []
+	with open('trainLabels.csv') as f:
+		reader = csv.DictReader(f)
+		for line in reader:
+			labels.append(line['Class'])
+	
+	# Change labels into IDs
+	labels = [getLabelId(label) for label in labels]
+	
+	return labels
+
+
+def getLabelId(label):
+	'''Returns the numeric ID for the given alphanumeric label'''
+	
+	# Calculate the ID for each character (0-9, then A-Z, then a-z), with 62 in total
+	label = ord(label)
+	if   ord('0') <= label <= ord('9'):		labelId = label - ord('0')
+	elif ord('A') <= label <= ord('Z'):		labelId = label - ord('A') + 10
+	elif ord('a') <= label <= ord('z'):		labelId = label - ord('a') + 36
+	
+	return labelId
+```
+
+Once again, you can run ```getLabels()``` in both its above forms, and get a list of either alphanumeric labels or numeric label IDs. Note that even once I turn the alphanumeric labels into their numeric IDs, I still choose to call them 'labels' in the code. This is because the alphanumeric labels and their numeric IDs are conceptually equivalent, and so will be used interchangably from here on out.
+
+###Splitting the data
+
+As we mention above, we need to split the data between training, validation and test datasets. I've chosen to do this by specifying the size of the validation and test datasets, and letting the training dataset be compaomised of all of the remaining images. Once again, how you split the data is up to you, but you must make sure that no dataset has any images from any of the other datasets.
+
+```python
+def splitData(data, labels, validationSize, testSize):
+	'''Splits the data and labels into three separate datasets'''
+	
+	# Split datasets
+	testData       = np.asarray(data[:testSize], dtype=np.float32)
+	validationData = np.asarray(data[testSize:testSize+validationSize], dtype=np.float32)
+	trainingData   = np.asarray(data[testSize+validationSize:], dtype=np.float32)
+	data = [trainingData, validationData, testData]
+	
+	# Split labels
+	testLabels       = np.asarray(labels[:testSize], dtype=np.float32)
+	validationLabels = np.asarray(labels[testSize:testSize+validationSize], dtype=np.float32)
+	trainingLabels   = np.asarray(labels[testSize+validationSize:], dtype=np.float32)
+	labels = [trainingLabels, validationLabels, testLabels]
+	
+	return data, labels
+```
+
+One thing to note at this point is that I've assumed that the dataset we downloaded is randomly shuffled. You can elect to shuffle the data further still to make sure this is the case, but I've decided not to do this here as I wanted to have recreatable validation and test datasets. The reason for this is to enable you to get very similar accuracies to what I've gotten, by running the code I've posted.
+
+###How much training / validation / test data do we need?
+
+In an ideal world, as much of all three as possible. However, since that is almost never the case, we normally have to look at the best ways of divvying up the available data into training, validation and test datasets. The basic idea is that we want as much data as possible in our training dataset (allowing it to become as good as possible), whilst still having enough data in each of our other datasets to be able to get a good idea of the network's accuracy. The general rule of thumb is to have somewhere between 10% and 20% of your data in each of your validation and test sets.
+
+###Saving the data
+
+We now get to the final part of our script; saving our data as a Pickle file, also referred to as *pickling* the data. Pickling data allows us to store data in a compressed format, whilst keeping their Python and Numpy data structures.
+
+```python
+import pickle
+import os
+
+def saveData(pickleFile, imageData, labels):
+	'''Pickles the image datasets and labels'''
+	
+	# Unpack data and labels
+	trainingData, validationData, testData = imageData
+	trainingLabels, validationLabels, testLabels = labels
+	
+	# Save each dataset / label set separately
+	with open(pickleFile, 'wb') as f:
+		save = {
+			'trainDataset': trainingData,
+			'trainLabels': trainingLabels,
+			'validDataset': validationData,
+			'validLabels': validationLabels,
+			'testDataset': testData,
+			'testLabels': testLabels,
+			}
+		pickle.dump(save, f, pickle.HIGHEST_PROTOCOL)
+	
+	# Show final pickle file size
+	print 'Compressed pickle size: %s' % os.stat(pickleFile).st_size
+```
+
