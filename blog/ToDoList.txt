@@ -1,0 +1,12 @@
+Intro
+
+- About me
+- Basics of a neural network
+- Spell check
+
+
+Getting data
+
+- Add checkLabels() sanity test
+- Add more info about centering pixels around zero (pics?)
+- Spell check
