@@ -4,20 +4,24 @@
 
 In this post, we'll be creating our first and most basic neural network, using TensorFlow. This is Google's contribution to the field of open-sourced neural network libraries. It uses a C++ backend, which allows for faster computations, although it can make it trickier to use to begin with, and more difficult to implement and tweak your own training algorithms later on. However, for our purposes it will do very well.
 
-I should mention now that there is a lot going on in this script. As with the last post, I'll go through and explain each part as I go, but there are quite a few aspect of this that we need to look at to create a coherent and useful script. There is a link at the bottom to the finished script, so feel free to play around with it first, then come back and read up on any parts that don't make sense.
-
-This script will be roughly broken down into 4 parts:
+I should mention now that there is a lot going on in this script. As with the last post, I'll go through and explain each part as I go, but there are quite a few aspect of this that we need to look at to create a coherent and useful script. There is a link at the bottom to the finished script, so feel free to play around with it first, then come back and read up on any parts that don't make sense. The script will be roughly broken down into 4 parts:
 
 1. Loading the pickled data
 2. Setting up the network
 3. Running the network
 4. Plotting the network accuracy
 
-So without further ado:
+###Network structure
+
+For our initial foray into neural networks, we'll stick with a very simple structure of 3 layers:
+
+- **The input layer.** This is simply how we will 'show' the network our images. In this case, it will be a layer 400 nodes wide, one for each pixels in the image.
+- **The hidden layer.** This is a layer of nodes which we don't interact with. Every node in the hidden layer is connected to every node in the input layer, and every one of these connections has a weight associated to it. Each node in the hidden layer also has a bias applied to it, and it is by adjusting these weights and biases that the network 'learns'.
+- **The output layer.** This is the layer from which we get the networks's assesment of the picture. There are as many output nodes as label IDs, and the output of each node shows how strongly the network believes the image we showed it has a particular ID. So the higher the output of node 10 is, the more strongly the network believes the image is of an '**A**'. Every output node is connected to every hidden node, and also has adjustable weights and a bias.
 
 ###Loading the pickled data
 
-We first of all need to get our data from the pickle file that we created in the [last post] (/master/blog/Blog_1__Getting_the_training_data.md).
+We first of all need to get our data from the pickle file that we created in the [last post] (/blog/Blog_1__Getting_the_training_data.md).
 
 ```python
 import pickle
@@ -35,7 +39,7 @@ with open('julia.pickle', 'rb') as f:
 	del save  # Hint to help garbage collection free up memory
 ```
 
-As I mentioned ast time, sanity checks are a wonderful thing. An easy one to check we've loaded the correct datasets is to have a look at the shapes of the datasets and labels. 'Shape' in this case refers to the sizes of the n-dimentional matrices we're using.
+As I mentioned last time, sanity checks are a wonderful thing. An easy check here is to look at the shape of the datasets and labels we've just loaded. 'Shape' in this case refers to the sizes of the n-dimentional matrices we're using.
 
 ```python
 def checkShapes():
