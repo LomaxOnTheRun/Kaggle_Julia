@@ -60,4 +60,34 @@ This looks correct, as we decided to put 1000 images aside for validation and te
 
 ###Refactoring the code
 
-Now, TensorFlow actually requires 
+Whilst our network layer has an input node for each pixel in the image, it doesn't actually have a 2D structure like our images have. This means that we need to reshape our images so that the pixels are represented by a single vector, rather than a 2D matrix.
+
+At the same time, our labels also need to be reformatted. This is because we want them to look like the 'ideal' network output. This 'ideal' output is a vector, 62 values long, made up entirely of zeros with the exception of the target output, which is a one. So if the image is of a '**2**', then the output vector will be [0, 0, 1, 0, ..., 0, 0], where all the values not shown are zeros.
+
+We do both of these reformats in a single function, then apply it to all datasets and labels.
+
+```python
+def reformat(dataset, labels):
+	'''Reformats datasets and labels'''
+	dataset = dataset.reshape((-1, dataset.shape[1] * dataset.shape[2])).astype(np.float32)
+	labels = (np.arange(numLabels) == labels[:, None]).astype(np.float32)
+	return dataset, labels
+
+# Fixed variables
+imageSize = 20
+numLabels = 62
+
+# Reformat the data
+trainDataset, trainLabels = reformat(trainDataset, trainLabels)
+validDataset, validLabels = reformat(validDataset, validLabels)
+testDataset, testLabels = reformat(testDataset, testLabels)
+```
+
+We can now do another sanity check by running ```checkShapes()``` again, this time after the reformatting. We should be able to see that both the datasets and the labels are 2D matrices.
+
+```
+>>> Training set: (4283, 400) (4283, 62)
+>>> Validation set: (1000, 400) (1000, 62)
+>>> Test set: (1000, 400) (1000, 62)
+```
+
