@@ -191,3 +191,96 @@ Next we're actually going to run our network and update the weights and biases. 
 			_, batchLoss = session.run([tfOptimizer, tfBatchLoss], feed_dict=feedDictionary)
 ```
 
+We then get to out progress checking code. This is where we calculate and store the accuracies for both the test and the validation data. Calculating the accuracies is done in the ```accuracy()``` function, which we'll look at in a bit.
+
+```python
+			# Show updates every once in a while
+			if (step % progressCheckInterval == 0):
+				
+				# Calculate training and validation accuracies
+				trainAccuracy = accuracy(tfTrainPrediction.eval(), trainLabels)
+				validAccuracy = accuracy(tfValidPrediction.eval(), validLabels)
+				
+				# Store accuracies for plotting
+				plots['trainAccuracy'].append(trainAccuracy)
+				plots['validAccuracy'].append(validAccuracy)
+```
+
+We then add a line to our progress table, and reset the timer so that we keep track of how long each group of steps have taken, rather than the cumulative time taken from the start.
+
+```python
+				# Show progress info
+				timeTaken = time.time() - startTime
+				print '%d\t%.3f\t\t%.1f%%\t\t%.1f%%\t\t%.3fs' % (step, batchLoss, trainAccuracy, validAccuracy, timeTaken)
+				startTime = time.time()
+```
+
+Finally, we show how well the final version of our network does at predicting the test data.
+
+```python
+		# Print final accuracy of test dataset
+		print "\nTest accuracy: %.1f%%\n" % accuracy(tfTestPrediction.eval(), testLabels)
+```
+
+###Getting the batch data
+
+There are a number of ways of doing this, but we're going to randomly select a ```batchSize``` amount of data from our training dataset as our batch data.
+
+```python
+def getBatchData():
+	'''Get batch data using randomly selected indexes'''
+	randomIndexes = np.random.randint(trainDataset.shape[0], size=batchSize)
+	batchDataset = trainDataset[randomIndexes]
+	batchLabels = trainLabels[randomIndexes]
+	return batchDataset, batchLabels
+```
+
+###Calculating accuracies
+
+We first check to see if the network has found the correct answer, by looking at which ID the network has assigned the highest probability to, then we find the percentage of correct answers the networks has worked out for the dataset in question.
+
+```python
+def accuracy(predictions, labels):
+	'''Check if most likely network outcomes are correct'''
+	maxPredictions = np.argmax(predictions, 1)
+	maxLabels = np.argmax(labels, 1)
+	numCorrectPredictions = np.sum(maxPredictions == maxLabels)
+	return (100.0 * numCorrectPredictions / predictions.shape[0])
+```
+
+###Running the program
+
+We're now going to run the program, but with a slight twist. We're going to make sure that even if we get bored with our current run, we can still get a graph of what we've done so far. We do this by listening for a ```KeyboardInterrupt```, and dealing with it nicely.
+
+```python
+# Train the data
+try:
+	plots = {'trainAccuracy' : [], 'validAccuracy' : []}
+	trainNeuralNetwork(plots)
+
+# Deal with KeyboardInterrupts
+except KeyboardInterrupt:
+	print 'KeyboardInterrupt'
+
+# Always show a plot, even if we've interrupted the training
+finally:
+	plotGraph(plots)
+```
+
+###Plotting the accuracies
+
+We can now plot how well our network did at learning to read our images. This is going to be particuarly useful for analysis, as comparing graphs is much easier and more inutitive than looking at long tables of numbers.
+
+```python
+def plotGraph(plots):
+	xAxisTrain = range(0, progressCheckInterval * len(plots['trainAccuracy']), progressCheckInterval)
+	xAxisValid = range(0, progressCheckInterval * len(plots['validAccuracy']), progressCheckInterval)
+	trainPlot, = plt.plot(xAxisTrain, plots['trainAccuracy'], label='Training data')
+	validPlot, = plt.plot(xAxisValid, plots['validAccuracy'], label='Validation data')
+	plt.legend(handles=[trainPlot, validPlot], loc=2)
+	plt.xlabel('Number of steps taken')
+	plt.ylabel('Accuracy (%)')
+	plt.title('Julia 1\n')
+	plt.tight_layout()
+	plt.show()
+```
