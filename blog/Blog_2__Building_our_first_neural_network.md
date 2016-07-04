@@ -13,11 +13,10 @@ I should mention now that there is a lot going on in this script. As with the la
 
 ###Network structure
 
-For our initial foray into neural networks, we'll stick with a very simple structure of 3 layers:
+For our initial foray into neural networks, we'll stick with an extremely simple structure of just 2 layers:
 
 - **The input layer.** This is simply how we will 'show' the network our images. In this case, it will be a layer 400 nodes wide, one for each pixels in the image.
-- **The hidden layer.** This is a layer of nodes which we don't interact with. Every node in the hidden layer is connected to every node in the input layer, and every one of these connections has a weight associated to it. Each node in the hidden layer also has a bias applied to it, and it is by adjusting these weights and biases that the network 'learns'.
-- **The output layer.** This is the layer from which we get the networks's assesment of the picture. There are as many output nodes as label IDs, and the output of each node shows how strongly the network believes the image we showed it has a particular ID. So the higher the output of node 10 is, the more strongly the network believes the image is of an '**A**'. Every output node is connected to every hidden node, and also has adjustable weights and a bias.
+- **The output layer.** This is the layer from which we get the networks's assesment of the picture. There are as many output nodes as label IDs, and the output of each node shows how strongly the network believes the image we showed it has a particular ID. So the higher the output of node 10 is, the more strongly the network believes the image is of an '**A**'. Every output node is connected to every input node, and every one of these connections has a weight associated to it. Each node in the output layer also has a bias applied to it, and it is by adjusting these weights and biases that the network 'learns'.
 
 ###Loading the pickled data
 
@@ -104,5 +103,29 @@ def trainNeuralNetwork(plots):
 	# Placeholders for batch data
 	tfBatchDataset = tf.placeholder(tf.float32, shape=(batchSize, imageSize * imageSize))
 	tfBatchLabels = tf.placeholder(tf.float32, shape=(batchSize, numLabels))
+```
+
+Next we're going to define some constants, namely each of the datasets. The difference between placeholders and constants is that once the session starts, we cannot change a constant.
+
+```python
+	# Full datasets
+	tfTrainDataset = tf.constant(trainDataset)
+	tfValidDataset = tf.constant(validDataset)
+	tfTestDataset = tf.constant(testDataset)
+```
+
+We're now going to build matrices for the weights and biases of the output layer. Again, because we're using TensorFlow, we can't just create a Numpy array. We're instead going to use two TensorFlow's own methods for creating matrices, one for creating a matrix of small randomised variables, and one for creating a matrix populated by zeros. We're also going to assign them as variables. The difference between a variable and a placeholder is that, while it can change value (unlike a constant), we cannot set a new value for it ourselves.
+
+```python
+	# Network weights and biases
+	tfWeights = tf.Variable(tf.truncated_normal([imageSize * imageSize, numLabels]))
+	tfBiases = tf.Variable(tf.zeros([numLabels]))
+```
+
+The optimiser comes next.
+
+```python
+	# Optimizer
+	tfOptimizer = tf.train.GradientDescentOptimizer(learningRate).minimize(tfBatchLoss)
 ```
 
