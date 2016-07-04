@@ -144,3 +144,33 @@ The optimiser is our choice of gradient descent method. We will run this every f
 	tfOptimizer = tf.train.GradientDescentOptimizer(learningRate).minimize(tfBatchLoss)
 ```
 
+Finally, we're going to set up a quick way of getting the predictions for datasets whenever we want them. This is going to be useful as we want to be able to keep an eye on how well our network is performing.
+
+```python
+	# Predictions for the training, validation, and test datasets
+	tfBatchPrediction = tf.nn.softmax(tfLogits)
+	tfTrainPrediction = tf.nn.softmax(tf.matmul(tfTrainDataset, tfWeights) + tfBiases)
+	tfValidPrediction = tf.nn.softmax(tf.matmul(tfValidDataset, tfWeights) + tfBiases)
+	tfTestPrediction = tf.nn.softmax(tf.matmul(tfTestDataset, tfWeights) + tfBiases)
+```
+
+A quick note on variable names. You'll probably notice that I've prefaced all of the variables used by TensorFlow with a *tf*. This is to help us remember that we can't just treat them like regular Python variables.
+
+###Running the network
+
+The bulk of the code to run the network will be in the same function as the code to set up the network, as we're going to need to be able to reference the variables we defined.
+
+We begin by starting the session, which essentially kicks off the C++ code running in the background. We then initialise all the variables we defined in our network (our weights and biases). We're also going to keep track of the time taken between progress checks, to get a feel for how long it's taking our system to learn. Finally, we print out the headers for the progress table we're going to update as we go.
+
+```python
+	# Start the TensorFlow session
+	with tf.Session() as session:
+		
+		# Initialise all the network variables
+		tf.initialize_all_variables().run()
+		
+		# Start the timer and show info headings
+		startTime = time.time()
+		print '\nStep\tBatch loss\tTrain acc\tValid acc\tTime\n'
+```
+
