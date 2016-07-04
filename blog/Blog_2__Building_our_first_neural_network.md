@@ -174,3 +174,20 @@ We begin by starting the session, which essentially kicks off the C++ code runni
 		print '\nStep\tBatch loss\tTrain acc\tValid acc\tTime\n'
 ```
 
+We're now going into what we're doing for every step of the training. Firstly, we need to get a new batch of images and associated labels. I'll go into this more later. Next, we need to create our ```feedDictionary```, which we're going to give to our network. Remember the placeholders we created? This is where we assign what their next values are going to be.
+
+```python
+		for step in xrange(numSteps):
+		
+			# Randomly get batch data, then feed it to the network
+			batchDataset, batchLabels = getBatchData()
+			feedDictionary = {tfBatchDataset : batchDataset, tfBatchLabels : batchLabels}
+```
+
+Next we're actually going to run our network and update the weights and biases. We do this by calling ```session.run()```, which tell TensorFlow that we want it to evaluate one or more of the variables we defined. The values of those variables are then returned to us. We use this calling mechanism to run and update our network by asking TensorFlow to evaluate ```tfOptimizer```, as this causes TensorFlow to run the ```tf.train.GradientDescentOptimizer(learningRate).minimize(tfBatchLoss)``` line, thus updating our network. Since we don't actually care about the output, we leave it blank by assigning the output to ```_```. We also get the loss for the batch data, which we'll show in our progress table, as well as pass in the feedDictionary to the network.
+
+```python
+			# Run the optimiser
+			_, batchLoss = session.run([tfOptimizer, tfBatchLoss], feed_dict=feedDictionary)
+```
+
