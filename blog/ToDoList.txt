@@ -1,12 +1,26 @@
-Intro
+Intro:
 
 - About me
 - Basics of a neural network
 - Spell check
 
 
-Getting data
+Getting data:
 
 - Add checkLabels() sanity test
 - Add more info about centering pixels around zero (pics?)
 - Spell check
+
+
+First network:
+
+ - Explain why using batch training
+
+
+
+
+
+
+Possibly use this later...
+
+- **The hidden layer.** This is a layer of nodes which we don't interact with. Every node in the hidden layer is connected to every node in the input layer, and every one of these connections has a weight associated to it. Each node in the hidden layer also has a bias applied to it, and it is by adjusting these weights and biases that the network 'learns'.
