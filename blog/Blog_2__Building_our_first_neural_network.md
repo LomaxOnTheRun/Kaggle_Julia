@@ -58,9 +58,9 @@ If you run the above code, you should get an output that looks like this:
 
 This looks correct, as we decided to put 1000 images aside for validation and testing, and each of the images are 20x20 pixels. The labels are just 1D vectors of IDs.
 
-###Refactoring the code
+###Refactoring our datasets and labels
 
-Whilst our network layer has an input node for each pixel in the image, it doesn't actually have a 2D structure like our images have. This means that we need to reshape our images so that the pixels are represented by a single vector, rather than a 2D matrix.
+Whilst our network layer has an input node for each pixel in the image, it doesn't actually have a 2D structure like our images have. This means that we need to reshape our each image so that the pixels are represented by a single vector, rather than a 2D matrix.
 
 At the same time, our labels also need to be reformatted. This is because we want them to look like the 'ideal' network output. This 'ideal' output is a vector, 62 values long, made up entirely of zeros with the exception of the target output, which is a one. So if the image is of a '**2**', then the output vector will be [0, 0, 1, 0, ..., 0, 0], where all the values not shown are zeros.
 
@@ -83,11 +83,26 @@ validDataset, validLabels = reformat(validDataset, validLabels)
 testDataset, testLabels = reformat(testDataset, testLabels)
 ```
 
-We can now do another sanity check by running ```checkShapes()``` again, this time after the reformatting. We should be able to see that both the datasets and the labels are 2D matrices.
+We can now do another sanity check by running ```checkShapes()``` again, this time after the reformat. We should be able to see that both the datasets and the labels are 2D matrices.
 
 ```
 >>> Training set: (4283, 400) (4283, 62)
 >>> Validation set: (1000, 400) (1000, 62)
 >>> Test set: (1000, 400) (1000, 62)
+```
+
+###Creating the network
+
+We're now going to set up the network, using TensorFlow objects. I'll try to explain everything as I go, but if you're still not quite sure what's going on, I recommend going to TensorFlow's [website] (https://www.tensorflow.org/versions/r0.9/tutorials/index.html), which goes over how to build networks for learning MNIST data. I have found these enormously helpful whilst trying to get a handle on using TensorFlow. Anyway, on with the show.
+
+The first thing we're going to do is to create placeholders for our batch data. When we train our network, we're going to show it a number of images before letting it backpropagate the error and adjust the weights. Using a placeholder means that a space in memory is allocated to this variable, while allowing us to change its value once the session has started. In this case, we're going to fill these placeholders with sets of images we want to network to learn from.
+
+```python
+def trainNeuralNetwork(plots):
+	'''Run the TensorFlow network'''
+
+	# Placeholders for batch data
+	tfBatchDataset = tf.placeholder(tf.float32, shape=(batchSize, imageSize * imageSize))
+	tfBatchLabels = tf.placeholder(tf.float32, shape=(batchSize, numLabels))
 ```
 
