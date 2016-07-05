@@ -253,6 +253,12 @@ def accuracy(predictions, labels):
 We're now going to run the program, but with a slight twist. We're going to make sure that even if we get bored with our current run, we can still get a graph of what we've done so far. We do this by listening for a ```KeyboardInterrupt```, and dealing with it nicely.
 
 ```python
+# Hyperparameters
+numSteps = 10001
+progressCheckInterval = 500
+batchSize = 100
+learningRate = 0.1
+
 # Train the data
 try:
 	plots = {'trainAccuracy' : [], 'validAccuracy' : []}
@@ -284,3 +290,45 @@ def plotGraph(plots):
 	plt.tight_layout()
 	plt.show()
 ```
+
+###Example run
+
+This is an example run of our brand new network, running on my small and not so powerful laptop:
+
+```
+Step	Batch loss	Train acc	Valid acc	Time
+
+0		18.715		1.4%		1.7%		0.230s
+500		8.324		3.7%		2.9%		3.877s
+1000	6.738		5.5%		4.8%		3.606s
+1500	6.512		6.9%		5.2%		3.014s
+2000	5.524		8.1%		5.7%		3.776s
+2500	5.579		9.3%		6.4%		3.382s
+3000	4.915		11.0%		6.3%		2.852s
+3500	4.738		12.2%		6.3%		2.950s
+4000	4.519		13.1%		6.1%		2.808s
+4500	4.086		13.4%		6.2%		3.460s
+5000	3.844		14.5%		6.3%		2.893s
+5500	4.316		15.4%		6.2%		2.860s
+6000	3.934		16.9%		6.1%		3.108s
+6500	3.804		17.7%		5.9%		3.631s
+7000	3.396		18.2%		6.1%		3.300s
+7500	3.731		19.1%		5.9%		3.244s
+8000	3.412		19.9%		6.5%		3.295s
+8500	3.790		20.7%		6.5%		3.287s
+9000	3.633		21.2%		6.4%		2.867s
+9500	3.728		21.7%		6.8%		3.045s
+10000	3.186		22.0%		6.4%		3.194s
+
+Test accuracy: 8.6%
+```
+
+And this is the graph produced:
+
+![Julia_1.png](/images/Julia_1_blog.png)
+
+As you can see, the accuracy we manage to get for our test data keeps improving, while the accuracy for our validation data stops improving relatively early. This is because our simple system begins to learn our training dataset and so gets better at identifying images from it, while it isn't good enough to generalise this knowledge to images it has never seen before. This is called overfitting.
+
+###The full script
+
+The full script for what we've seen today can be found [here] (/blog/Julia_1.py).
