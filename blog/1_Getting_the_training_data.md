@@ -280,4 +280,4 @@ My first encounter with this was when I failed to check the images were being im
 
 ###The full script
 
-Here's the link to the full script of everything we've looked at in this post: [julia_pickle.py](https://github.com/LomaxOnTheRun/Kaggle_Julia/blob/master/blog/julia_pickle.py)
+[Here](/blog/Julia_pickle.py)'s the link to the full script of everything we've looked at in this post.
