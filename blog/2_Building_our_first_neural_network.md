@@ -114,27 +114,58 @@ Next we're going to define some constants, namely each of the datasets. The diff
 	tfTestDataset = tf.constant(testDataset)
 ```
 
-We're now going to build matrices for the weights and biases of the output layer. Again, because we're using TensorFlow, we can't just create a Numpy array. We're instead going to use two TensorFlow's own methods for creating matrices, one for creating a matrix of small randomised variables, and one for creating a matrix populated by zeros. We're also going to assign them as variables. The difference between a variable and a placeholder is that, while it can change value (unlike a constant), we cannot set a new value for it ourselves.
+We're now going to build matrices for the weights and biases of the output layer. Again, because we're using TensorFlow, we can't just create a Numpy array. We're instead going to use two TensorFlow's own methods for creating matrices, one for creating a matrix of small randomised variables, and one for creating a matrix populated by zeros. We're also going to assign them as variables. The difference between a variable and a placeholder is that, while it can change value (unlike a constant), we cannot set a new value for it ourselves. We do this by calling the function ```getWeightsAndBiases()```...
 
 ```python
 	# Network weights and biases
+	tfWeights, tfBiases = getWeightsAndBiases()
+```
+
+... which looks like this:
+
+```python
+def getWeightsAndBiases():
+	'''Create initial weights and biases'''
 	tfWeights = tf.Variable(tf.truncated_normal([imageSize * imageSize, numLabels]))
 	tfBiases = tf.Variable(tf.zeros([numLabels]))
+	return tfWeights, tfBiases
+```
+
+We next get the logits output by our network. A logit is the 'raw' output of a node. You get it my multiplying the inputs into the node with the weights the node has for each of those inputs. Here, the inputs into the node refer to the pixels of the image. We can also carry out this process for a number of images simulatneously by mutiplying a matrix of 'stacked' images by a weight matrix of all the output nodes. We do exactly this by using the ```tf.matmul()``` expression. We then add a vector of biases to this outcome to get our 'raw output' or *logits*. This is called by:
+
+```python
+	# Training computation
+	tfLogits = getLogits(tfBatchDataset, tfWeights, tfBiases)
+```
+
+which is defined as:
+
+```python
+def getLogits(tfBatchDataset, tfWeights, tfBiases):
+	'''Runs images through the network and returns logits'''
+	tfLogits = tf.matmul(tfBatchDataset, tfWeights) + tfBiases
+	return tfLogits
 ```
 
 The next bit requires a little more explation, as there are a few ideas to consider:
 
-1. **Logits.** A logit is the 'raw' output of a node. You get it my multiplying the inputs into the node with the weights the node has for each of those inputs. Here, the inputs into the node refer to the pixels of the image. We can also carry out this process for a number of images simulatneously by mutiplying a matrix of 'stacked' images by a weight matrix of all the output nodes. We do exactly this by using the ```tf.matmul()``` expression. We then add a vector of biases to this outcome to get our 'raw output' or *logits*.
-2. **Softmax.** Since we want an estimation of much the network believes a particular ID is the correct one, we want to have all output values range between 0 and 1. We also obviously want higher values to saty higher and lower values to stay lower. One way of doing this is to use the [softmax function] (https://en.wikipedia.org/wiki/Softmax_function).
-3. **Cross-entropy.** This is basically a way of measuring how accurate our outputs are. It looks at the difference between each output value, and each value in the label vector we created above. So for every incorrect ID, the label vector value is 0, and the cross-entropy is bigger the higher our networks's evaluation of that ID is.
-4. **Loss.** This is the value calculated by the cross-entropy, showing how inaccurate our network is for the images provided.
+1. **Softmax.** Since we want an estimation of much the network believes a particular ID is the correct one, we want to have all output values range between 0 and 1. We also obviously want higher values to saty higher and lower values to stay lower. One way of doing this is to use the [softmax function] (https://en.wikipedia.org/wiki/Softmax_function).
+2. **Cross-entropy.** This is basically a way of measuring how accurate our outputs are. It looks at the difference between each output value, and each value in the label vector we created above. So for every incorrect ID, the label vector value is 0, and the cross-entropy is bigger the higher our networks's evaluation of that ID is.
+3. **Loss.** This is the value calculated by the cross-entropy, showing how inaccurate our network is for the images provided.
 
-The ```tf.reduce_mean()``` function is TensorFlow's way of getting the mean value of a matrix.
+The ```tf.reduce_mean()``` function is TensorFlow's way of getting the mean value of a matrix. In our function this is called by:
 
 ```python
-	# Training computation
-	tfLogits = tf.matmul(tfBatchDataset, tfWeights) + tfBiases
+	tfBatchLoss = getBatchLoss(tfLogits, tfBatchLabels)
+```
+
+which is defined by:
+
+```python
+def getBatchLoss(tfLogits, tfBatchLabels):
+	'''Calculates the loss from the current batch of images'''
 	tfBatchLoss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(tfLogits, tfBatchLabels))
+	return tfBatchLoss
 ```
 
 The optimiser is our choice of gradient descent method. We will run this every for every step, and it will use the learning rate given to try to minimise the loss calculated above. It will also automatically update the weights and biases of our network for us, which is pretty neat. We're going to go with a ```GradientDescentOptimizer``` as it's conceptually the simplest to work with.
@@ -149,9 +180,9 @@ Finally, we're going to set up a quick way of getting the predictions for datase
 ```python
 	# Predictions for the training, validation, and test datasets
 	tfBatchPrediction = tf.nn.softmax(tfLogits)
-	tfTrainPrediction = tf.nn.softmax(tf.matmul(tfTrainDataset, tfWeights) + tfBiases)
-	tfValidPrediction = tf.nn.softmax(tf.matmul(tfValidDataset, tfWeights) + tfBiases)
-	tfTestPrediction = tf.nn.softmax(tf.matmul(tfTestDataset, tfWeights) + tfBiases)
+	tfTrainPrediction = tf.nn.softmax(getLogits(tfTrainDataset, tfWeights, tfBiases))
+	tfValidPrediction = tf.nn.softmax(getLogits(tfValidDataset, tfWeights, tfBiases))
+	tfTestPrediction = tf.nn.softmax(getLogits(tfTestDataset, tfWeights, tfBiases))
 ```
 
 A quick note on variable names. You'll probably notice that I've prefaced all of the variables used by TensorFlow with a *tf*. This is to help us remember that we can't just treat them like regular Python variables.
