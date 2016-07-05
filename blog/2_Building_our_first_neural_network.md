@@ -284,11 +284,14 @@ def accuracy(predictions, labels):
 We're now going to run the program, but with a slight twist. We're going to make sure that even if we get bored with our current run, we can still get a graph of what we've done so far. We do this by listening for a ```KeyboardInterrupt```, and dealing with it nicely.
 
 ```python
-# Hyperparameters
-numSteps = 10001
-progressCheckInterval = 500
+# Network hyperparameters
 batchSize = 100
 learningRate = 0.1
+numHidden = 50
+
+# Training parameters
+numSteps = 10001
+progressCheckInterval = 500
 
 # Train the data
 try:
