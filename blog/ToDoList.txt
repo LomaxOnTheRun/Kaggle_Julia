@@ -16,6 +16,7 @@ First network:
 
  - Explain why using batch training
  - Add graph for softmax
+ - Put imports in explanation code properly
 
 
 In general:
