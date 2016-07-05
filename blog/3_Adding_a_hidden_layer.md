@@ -60,4 +60,14 @@ In the graph above, we can clearly see the validation accuracy leveling out whil
 
 We can now refine our search of a good hyperparameter (the number of nodes in the hidden layer) by checking the value we've chosen from our previous comparison, with a value 2x smaller than it, and a value 2x larger than it.
 
+![Comparison 2](/images/Julia_2_blog_2.png)
 
+All three of our hyperparameters now cause the validation to level off at the same point, which means that the lowest (and so fastest) of our choices is the best one. We now repeate the test again, this time with the values 25, 50 and 100.
+
+![Comparison 3](/images/Julia_2_blog_3.png)
+
+This time, we can see that the validation accuracy for the network with 25 hidden nodes levels off before the others. Since time isn't a big factor (the 25 node network and the 50 node network took about the same amount of time to run), we'll use the 50 node hidden layer. We'll use this process of choosing hyperparameters again several times, as the network gets larger and more complex.
+
+### The complete script
+
+Our final script for this post can be found [here](/blog/Julia_2.py).
