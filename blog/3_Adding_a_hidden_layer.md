@@ -40,18 +40,24 @@ Don't forget to change your graph label from 'Julia 1' to 'Julia 2'.
 
 ###Number of hidden layers
 
-The sharper eyed readers may have noticed that we've snuck in an extra variable, ```numHidden```. This is an extra hyperparameter for our network, and is just the amount of nodes we want our hidden layer to have. But how do we choose a new hyperparameter?
+The sharper eyed readers may have noticed that we snuck in an extra variable, ```numHidden```, in the functions defined above. This is an extra hyperparameter for our network, and is just the amount of nodes we want our hidden layer to have. But how do we choose a new hyperparameter?
 
 The first thing to do is to guess a rough ballpark figure. We can guess that if we have 1 node, we're going to cripple our network, as all the output nodes will just have a single connection going to each one. If we have a 1,000,000 nodes, our network is going to run very slowly, and since we're still just playing with rough numbers, we want to very quickly get an idea if our choice of hyperparameter is rubbish. So, since we have 400 input nodes and 62 output nodes, we might think that 100 nodes might be roughly correct.
 
 We're now going to run our program 3 times, once with our guess, once with a value 10x smaller than our guess, and once with a value 10x larger than our guess. This way we should have a much better idea of what's going to work for our network.
 
-![Comparison 1](/images/blog/Julia_2_blog_1.png)
+![Comparison 1](/images/Julia_2_blog_1.png)
 
 As we can see from the graph, the more nodes we have, the better the training and validation results become, but the more overfitted the network becomes. We'll look at ways to decrease overfitting later on (and so raise the validation results closer to the training results), but a network that's overfitting too much is probably too complex for the task and is likely to take longer than an ideal network.
 
-The other key issue to consider here is the time taken for all of these to run. The network with 10 hidden nodes took about 60s to run, the network with 100 hidden nodes took about 100s to run, and the network with 1000 nodes took about 1400s (roughly 23 minutes) to run. Having our still very basic network take 20 minutes each time we want to run it is far too long, so that one's out. There isn't enough of a difference in time between the other two for it to be a factor, so we'll go with the 100 node network.
+The other key issue to consider here is the time taken for all of these to run. The network with 10 hidden nodes took about 60s to run, the network with 100 hidden nodes took about 100s to run, and the network with 1000 nodes took about 1400s (roughly 23 minutes) to run. Having our still very basic network take 20 minutes each time we want to run it is far too long, so that one's out. There isn't enough of a difference in time between the other two for it to be a factor, so we'll go with the more successful 100 node network.
 
-We can now refine our search of a good hyperparameter by checking the value we've chosen from our previous comparison, with a value 2x smaller than it, and a value 2x larger than it.
+###Number of steps
+
+In the graph above, we can clearly see the validation accuracy leveling out while the training accuracy keeps getting better. Since we don't actually care about the training validation, beyond using it to see how much overfitting is happening, we want to only train our network for as long as it takes for the validation accuracy to hit it's maximum and level out. Going by the graph, it looks like the validation accuracy completely stopped improving after about 7000 steps. If we wanted to, we could choose to run our network for only 7000 steps, to save us the extra time. However, since *the extra time* is only going to be a few seconds, we can keep the current number of steps as it lets us see if something we change helps it to continue learning after 10,000 steps.
+
+###Refining our hyperparameters
+
+We can now refine our search of a good hyperparameter (the number of nodes in the hidden layer) by checking the value we've chosen from our previous comparison, with a value 2x smaller than it, and a value 2x larger than it.
 
 
