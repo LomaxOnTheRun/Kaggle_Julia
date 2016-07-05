@@ -8,12 +8,14 @@ import time
 imageSize = 20
 numLabels = 62
 
-# Hyperparameters
-numSteps = 10001
-progressCheckInterval = 500
+# Network hyperparameters
 batchSize = 100
 learningRate = 0.1
 numHidden = 50
+
+# Training parameters
+numSteps = 10001
+progressCheckInterval = 500
 
 # Gets the training data and labels out of the pickle file
 with open('julia.pickle', 'rb') as f:
