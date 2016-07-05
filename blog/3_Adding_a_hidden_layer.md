@@ -46,8 +46,12 @@ The first thing to do is to guess a rough ballpark figure. We can guess that if 
 
 We're now going to run our program 3 times, once with our guess, once with a value 10x smaller than our guess, and once with a value 10x larger than our guess. This way we should have a much better idea of what's going to work for our network.
 
-**PIC**
+![Comparison 1](/images/blog/Julia_2_blog_1.png)
 
-As we can see from the graph, the more nodes we have, the better the training and validation results become, but the more overfitted the network becomes. We'll look at ways to decrease overfitting later on (and so raise the validation results closer to the training results). The other key issue to consider here is the time taken for all of these to run.
+As we can see from the graph, the more nodes we have, the better the training and validation results become, but the more overfitted the network becomes. We'll look at ways to decrease overfitting later on (and so raise the validation results closer to the training results), but a network that's overfitting too much is probably too complex for the task and is likely to take longer than an ideal network.
 
-The network with 10 hidden nodes took about 60s to run, the network with 100 hidden nodes took about 100s to run, and the network with 1000 nodes took about 1400s (roughly 23 minutes) to run. Having our still very basic network take 20 minutes each time we want to run it is far too long, so that one's out. There isn't enough of a difference in time between the other two for it to be a factor, so we'll go with the 100 node network.
+The other key issue to consider here is the time taken for all of these to run. The network with 10 hidden nodes took about 60s to run, the network with 100 hidden nodes took about 100s to run, and the network with 1000 nodes took about 1400s (roughly 23 minutes) to run. Having our still very basic network take 20 minutes each time we want to run it is far too long, so that one's out. There isn't enough of a difference in time between the other two for it to be a factor, so we'll go with the 100 node network.
+
+We can now refine our search of a good hyperparameter by checking the value we've chosen from our previous comparison, with a value 2x smaller than it, and a value 2x larger than it.
+
+
