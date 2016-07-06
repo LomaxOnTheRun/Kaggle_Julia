@@ -9,8 +9,8 @@ imageSize = 20
 numLabels = 62
 
 # Network hyperparameters
-batchSize = 100
-learningRate = 0.1
+batchSize = 25
+learningRate = 0.2
 numHidden = 50
 
 # Training parameters
