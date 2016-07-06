@@ -92,7 +92,7 @@ A learning rate of 0.1 is a clear winner here. The 1.0 learning rate completely 
 
 ![Comparison 7](/images/Julia_2_blog_7.png)
 
-A learning rate of 0.2 seems to be the best (0.4 is a little to chaotic), so we'll go with this for now. Don't forget, we can absolutely re-evaluate and change these at any point, and we'll probably end up doing exactly that a number of times. For now, we're using values we feel confident with for our hyperparameters.
+A learning rate of 0.2 seems to be the best, so we'll go with this for now. Don't forget, we can absolutely re-evaluate and change these at any point, and we'll probably end up doing exactly that a number of times. For now, we're using values we feel confident with for our hyperparameters.
 
 ### The complete script
 
