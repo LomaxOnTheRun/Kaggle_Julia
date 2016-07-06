@@ -24,7 +24,7 @@ def getWeightsAndBiases():
 
 ###The logits
 
-The other function we need to change is how the logits are calculated. We do this by calculating the 'logits' for the hidden layer, then applying a RELU function to them, then calculating the logits for the output layer from the hidden layer. The RELU function acts to non-linearise the hidden logits. There are several ways of doing this, but RELUs are very cheap computationally.
+The other function we need to change is how the logits are calculated. We do this by calculating the 'logits' for the hidden layer, then applying a ReLU function to them, then calculating the logits for the output layer from the hidden layer. The ReLU function acts to non-linearise the hidden logits. There are several ways of doing this, but ReLUs are very cheap computationally.
 
 ```python
 def getLogits(tfBatchDataset, tfWeights, tfBiases):
@@ -66,7 +66,23 @@ All three of our hyperparameters now cause the validation to level off at the sa
 
 ![Comparison 3](/images/Julia_2_blog_3.png)
 
-This time, we can see that the validation accuracy for the network with 25 hidden nodes levels off before the others. Since time isn't a big factor (the 25 node network and the 50 node network took about the same amount of time to run), we'll use the 50 node hidden layer. We'll use this process of choosing hyperparameters again several times, as the network gets larger and more complex.
+This time, we can see that the validation accuracy for the network with 25 hidden nodes levels off before the others. Since time isn't a big factor (the 25 node network and the 50 node network took about the same amount of time to run), we'll use the 50 node hidden layer.
+
+We're now going to use exactly the same methodology to see what values are best for the other two hyper parameter values we've already got in our system: batch size and learning rate.
+
+###Batch size
+
+We've currently been using the value of 100, but is it the best value for us to use? Let's try running a few checks with values 10x larger and smaller. We're only going to label the colours now, but for each colour, the solid line is for the accuracy on the training data, and the dashed line is the accuracy on the validation data.
+
+![Comparison 4](/images/Julia_2_blog_4.png)
+
+So we can see that apart from the batch value of 1, the other all perform about as well as each other. The run with a batch size of 1000 took much longer than the other two to run (just over 6 minutes), whereas the others took around a minute. Since the run with a batch size of 100 was slightly better than the one with 10, we'll select that one. We can now run a secondary test with values 2x larger and smaller than our choice.
+
+![Comparison 5](/images/Julia_2_blog_5.png)
+
+Since there is now very little difference in performance, we're going to go with a batch size of 25, as it is the fastest.
+
+###
 
 ### The complete script
 
