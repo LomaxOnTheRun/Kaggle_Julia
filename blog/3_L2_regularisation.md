@@ -35,3 +35,7 @@ From which we select the 0.001 value to continue with.
 ![Comparison 2](/images/Julia_3_blog_2.png)
 
 And from that, we pick 0.0005, as we want to use the smallest possible value possible, as it allows for the most accuracy. We can show this value in Python as ```5e-4```.
+
+###The full script
+
+The full script can be found [here](/blog/Julia_3.py). Note that I've changed some of the code so that the training process can be called from another script, to allow for easier comparisons of hyperparameters.
