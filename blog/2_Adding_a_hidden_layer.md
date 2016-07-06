@@ -82,7 +82,17 @@ So we can see that apart from the batch value of 1, the other all perform about 
 
 Since there is now very little difference in performance, we're going to go with a batch size of 25, as it is the fastest.
 
-###
+###Learning rate
+
+Once again, we try a 10x comparison of learning rates.
+
+![Comparison 6](/images/Julia_2_blog_6.png)
+
+A learning rate of 0.1 is a clear winner here. The 1.0 learning rate completely overshoots the minimum, and the other two learning rates are too slow. It's possible that the lower learning rates would do better in the long run, but for this network we're after a quick learning curve as well as decent results. On to our 2x comparisons.
+
+![Comparison 7](/images/Julia_2_blog_7.png)
+
+A learning rate of 0.2 seems to be the best (0.4 is a little to chaotic), so we'll go with this for now. Don't forget, we can absolutely re-evaluate and change these at any point, and we'll probably end up doing exactly that a number of times. For now, we're using values we feel confident with for our hyperparameters.
 
 ### The complete script
 
