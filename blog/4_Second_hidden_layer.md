@@ -35,3 +35,42 @@ def getLogits(tfBatchDataset, tfWeights, tfBiases, dropout=1.0):
 	return tfLogits
 ```
 
+Thankfully the code that calculates the L2 regularisation already takes into account all the weights and biases we create and put into our ```tfWeights``` and ```tfBiases``` dictionaries, so we don't need to change anything there. When we now run our code, we should get something that resembles this:
+
+![Second hidden layer 1](/images/Julia_4_blog_1)
+
+Huh, that doesn't look like our normal graph. It looks like the network gets stuck for a few thousend steps, before eventually sorting itself out. If we extend the amount of steps we allow our network to 3000, we get something that looks a lot more like what we're used to seeing.
+
+![Second hidden layer 2](/images/Julia_4_blog_2)
+
+We can see that our network learns in a very similar way to normal, once it's broken through the plateau. So what's getting it stuck?
+
+###Investigating the plateau
+
+We can change our code slightly to get a better idea of what's happening in our network. We're going to make the network show us every correct guess it makes.
+
+```python
+def accuracy(predictions, labels, showGuesses=False):
+	'''Check if most likely network outcomes are correct'''
+	if showGuesses:
+		guesses = []
+		for index, prediction in enumerate(predictions):
+			guess = np.argmax(prediction)
+			if (guess == np.argmax(labels[index])):
+				guesses.append(guess)
+		print guesses
+		return (100.0 * len(guesses)) / predictions.shape[0]
+	else:
+		maxPredictions = np.argmax(predictions, 1)
+		maxLabels = np.argmax(labels, 1)
+		numCorrectPredictions = np.sum(maxPredictions == maxLabels)
+		return (100.0 * numCorrectPredictions / predictions.shape[0])
+```
+
+We then just need to set that ```showGuesses``` flag to true in our runs, to see what answers it's getting correct.
+
+```python
+				trainAccuracy = accuracy(tfTrainPrediction.eval(), trainLabels, showGuesses=True)
+```
+
+If we run the code now, we can see that the network very quickly gets stuck exclusively getting **10**s correctly, which correspond to **A**s. Let's take a look at the breakdown of our validation dataset, to see if it can throw some light on this. Note that we're using the validation dataset instead of the training dataset as it's smaller and therefore generally faster to run diagnotics on. We can now put the foll
