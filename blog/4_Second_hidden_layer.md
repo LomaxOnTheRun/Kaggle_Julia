@@ -37,11 +37,11 @@ def getLogits(tfBatchDataset, tfWeights, tfBiases, dropout=1.0):
 
 Thankfully the code that calculates the L2 regularisation already takes into account all the weights and biases we create and put into our ```tfWeights``` and ```tfBiases``` dictionaries, so we don't need to change anything there. When we now run our code, we should get something that resembles this:
 
-![Second hidden layer 1](/images/Julia_4_blog_1)
+![Second hidden layer 1](/images/Julia_4_blog_1.png)
 
 Huh, that doesn't look like our normal graph. It looks like the network gets stuck for a few thousend steps, before eventually sorting itself out. In fact, if you run this a few times, you should see that it's getting stuck at the same plce every time: 7.4% for the training data, and 6.2% for the validation data. This is suspicious, as the network normally still jups around a little when we've maxed out our accuracy. If we extend the amount of steps we allow our network to 3000, we get something that looks a lot more like what we're used to seeing.
 
-![Second hidden layer 2](/images/Julia_4_blog_2)
+![Second hidden layer 2](/images/Julia_4_blog_2.png)
 
 We can see that our network learns in a very similar way to normal, once it's broken through the plateau. So what's getting it stuck?
 
