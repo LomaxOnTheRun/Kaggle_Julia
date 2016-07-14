@@ -90,4 +90,8 @@ So it looks like there are a lot more 'A's (or '10's) in our validation dataset 
 showLabelCounts(trainLabels)
 ```
 
-There are 315 counts out of 4283 total trainining data points, which gives us a percentage of 7.35, which matches our plateau value. Let's keep assuming our theory is correct.
+There are 315 counts out of 4283 total trainining data points, which gives us a percentage of 7.35, which matches our plateau value. This means our network has come to a saddle point, which only [gets worse the more complex our network gets](https://arxiv.org/abs/1406.2572). There are a few ways of minimising this problem (changing learning rates, momentum, etc.), but our network will hit a point where we'll need to deal with it directly, or it will get stuck on this plateau permanently. We'll see how to do this in the next post.
+
+###Full code
+
+The full script for this post can be found [here](/blog/Julia_4.py).
