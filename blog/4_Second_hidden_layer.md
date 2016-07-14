@@ -39,7 +39,7 @@ Thankfully the code that calculates the L2 regularisation already takes into acc
 
 ![Second hidden layer 1](/images/Julia_4_blog_1)
 
-Huh, that doesn't look like our normal graph. It looks like the network gets stuck for a few thousend steps, before eventually sorting itself out. If we extend the amount of steps we allow our network to 3000, we get something that looks a lot more like what we're used to seeing.
+Huh, that doesn't look like our normal graph. It looks like the network gets stuck for a few thousend steps, before eventually sorting itself out. In fact, if you run this a few times, you should see that it's getting stuck at the same plce every time: 7.4% for the training data, and 6.2% for the validation data. This is suspicious, as the network normally still jups around a little when we've maxed out our accuracy. If we extend the amount of steps we allow our network to 3000, we get something that looks a lot more like what we're used to seeing.
 
 ![Second hidden layer 2](/images/Julia_4_blog_2)
 
@@ -73,4 +73,21 @@ We then just need to set that ```showGuesses``` flag to true in our runs, to see
 				trainAccuracy = accuracy(tfTrainPrediction.eval(), trainLabels, showGuesses=True)
 ```
 
-If we run the code now, we can see that the network very quickly gets stuck exclusively getting **10**s correctly, which correspond to **A**s. Let's take a look at the breakdown of our validation dataset, to see if it can throw some light on this. Note that we're using the validation dataset instead of the training dataset as it's smaller and therefore generally faster to run diagnotics on. We can now put the foll
+If we run the code now, we can see that the network very quickly gets stuck exclusively getting '10's correctly, which correspond to 'A's. Let's take a look at the breakdown of our validation dataset, to see if it can throw some light on this. Note that we're using the validation dataset instead of the training dataset as it's smaller and therefore generally faster to run diagnotics on. We put the follow code in ust before we reformat our datasets and labels.
+
+```python
+def showLabelCounts(labels):
+	for index in xrange(62):
+		count = (labels == index).sum()
+		print 'ID: %s\t\tCount: %s' % (index, count)
+
+showLabelCounts(validLabels)
+```
+
+So it looks like there are a lot more 'A's (or '10's) in our validation dataset than any other label. In fact, there are 62 '10's, which matches up exactly with the accuracy of our network during the plateau (remember, we have 1000 data points in our validation dataset). It's reasonable to guess that the network is probably just using a very simplistic strategy of guessing the most common label for every input. We can check if our theory holds for the training data, by showing the training label counts.
+
+```python
+showLabelCounts(trainLabels)
+```
+
+There are 315 counts out of 4283 total trainining data points, which gives us a percentage of 7.35, which matches our plateau value. Let's keep assuming our theory is correct.
