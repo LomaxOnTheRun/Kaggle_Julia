@@ -66,4 +66,10 @@ We get a very significant improvement by using 0.4 as the learning rate. We can 
 
 ![Graph 3](/images/Julia_5_blog_3.png)
 
-Nope, it looks like 0.4 is indeed our best value.
+Nope, it looks like 0.4 is indeed our best value. We can now run this for 30,000 steps to see how our network deals with this in the long run.
+
+![Graph 4](/images/Julia_5_blog_4.png)
+
+###Full script
+
+You can get the full script for this post [here](/blog/Julia_5.py).
