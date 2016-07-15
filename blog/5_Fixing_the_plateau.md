@@ -38,4 +38,20 @@ def getBatchData(step):
 	return batchImages, batchLabels
 ```
 
-We now just have a couple of things to take care of before our script can run again.
+We now just have a couple of things to take care of before our script can run again. The first is that we need to pass in the current step number into our ```getBatchData()``` function.
+
+```python
+			batchDataset, batchLabels = getBatchData(step)
+```
+
+The second is that we need to change the batch size to be the same as the number of labels we have.
+
+```python
+batchSize = numLabels
+```
+
+When we run our new script, we get a graph that looks like this:
+
+![Graph 1](/images/Julia_5_blog_1.png)
+
+This is obviously much worse that before, but with the benefit of not having the validation accuracy stuck at 6.2%.
