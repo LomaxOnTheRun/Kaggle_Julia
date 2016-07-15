@@ -58,7 +58,12 @@ This is obviously much worse that before, but with the benefit of not having the
 
 ###Getting back up to speed
 
-We're now going to try to adjust the hyper parameters to fit the new setup of the network. The forst one we'll lokk at is the learning rate. To save us time, we're going to assume that the values we have are roughly correct, so we're going to try doubling and halving the values, then fine turning them a little more.
+We're now going to try to adjust the learning rate hyperparameter to optimise the new setup of the network. To save us time, we're going to assume that the value we have is roughly correct, so we're only going to try doubling and halving them, then fine turning them a little more.
 
 ![Graph 2](/images/Julia_5_blog_2.png)
 
+We get a very significant improvement by using 0.4 as the learning rate. We can try to fine tune this a little more.
+
+![Graph 3](/images/Julia_5_blog_3.png)
+
+Nope, it looks like 0.4 is indeed our best value.
