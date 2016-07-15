@@ -54,4 +54,11 @@ When we run our new script, we get a graph that looks like this:
 
 ![Graph 1](/images/Julia_5_blog_1.png)
 
-This is obviously much worse that before, but with the benefit of not having the validation accuracy stuck at 6.2%.
+This is obviously much worse that before, but with the benefit of not having the validation accuracy stuck at 6.2%. This will help us overcome a major obstacle later on, but if you want to ignore this step for now and continue the tutorial without it, you absolutely can. For the rest of us, let's look at getting our accuracy up again.
+
+###Getting back up to speed
+
+We're now going to try to adjust the hyper parameters to fit the new setup of the network. The forst one we'll lokk at is the learning rate. To save us time, we're going to assume that the values we have are roughly correct, so we're going to try doubling and halving the values, then fine turning them a little more.
+
+![Graph 2](/images/Julia_5_blog_2.png)
+
