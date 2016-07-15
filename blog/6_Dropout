@@ -1,0 +1,19 @@
+#Dropout
+
+###Overview
+
+We're going to see how to add dropout to our network, as well as it's effects on our network's accuracy.
+
+###Adding dropout
+
+To add dropout, we're first going to change the code to calculate logits. This is done by adding a ```tf.nn.dropout()``` to the outputs of our hidden layers.
+
+```python
+def getLogits(tfBatchDataset, tfWeights, tfBiases, dropout=1.0):
+	'''Runs images through the network and returns logits'''
+	tfHidden1 = tf.nn.dropout(tf.nn.relu(tf.matmul(tfBatchDataset, tfWeights['hidden1']) + tfBiases['hidden1']), dropout)
+	tfHidden2 = tf.nn.dropout(tf.nn.relu(tf.matmul(tfHidden1, tfWeights['hidden2']) + tfBiases['hidden2']), dropout)
+	tfLogits = tf.matmul(tfHidden2, tfWeights['output']) + tfBiases['output']
+	return tfLogits
+```
+
