@@ -60,6 +60,20 @@ The final two bits of logic we need to change are how we get the batch data to o
 ```
 
 ```python
+def getBatchData(step):
+	'''Get one of each type of image'''
+	# Images
+	batchImages = np.ndarray(shape=(62, imageSize, imageSize, numChannels), dtype=np.float32)
+	for index, imageBin in enumerate(imageBins[:62]):
+		showStep = step
+		while showStep >= len(imageBin):
+			showStep -= len(imageBin)
+		image = imageBin[showStep]
+		batchImages[index, :, :, :] = image
+	# Labels
+	labels = np.arange(numLabels)
+	batchLabels = (np.arange(numLabels) == labels[:, None]).astype(np.float32)
+	return batchImages, batchLabels
 ```
 
 We're now going to try to run our network with some initial values for our new hyperparameters. These values were many gotten by looking at other people's networks to see what values are used in the commnity at large.
@@ -70,3 +84,6 @@ patch_size = 5
 depth = 16
 ```
 
+We now get a graph that looks something like this:
+
+![Graph 1](/images/Julia_6_blog_1.png)
