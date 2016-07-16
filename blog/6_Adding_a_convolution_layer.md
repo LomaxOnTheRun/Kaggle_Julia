@@ -43,3 +43,30 @@ def getLogits(tfBatchDataset, tfWeights, tfBiases, dropout=1.0):
 	tfLogits = tf.matmul(tfHidden2, tfWeights['output']) + tfBiases['output']
 	return tfLogits
 ```
+
+We also need to change how we reformat our datasets at the start of our script. Since we need to accomodate the convolution layer looking for a stack of images, rather than a single image at a time, we'll need to place each pixel in a mini stack of size 1.
+
+```python
+def reformat(dataset, labels):
+	dataset = dataset.reshape((-1, imageSize, imageSize, numChannels)).astype(np.float32)
+	labels = (np.arange(numLabels) == labels[:, None]).astype(np.float32)
+	return dataset, labels
+```
+
+The final two bits of logic we need to change are how we get the batch data to our network. This is because the shape of our matrices have changed, and so we need to both create the ```tfBatchDataset``` placeholder and then fill it accordingly.
+
+```python
+	tfBatchDataset = tf.placeholder(tf.float32, shape=(batchSize, imageSize, imageSize, numChannels))
+```
+
+```python
+```
+
+We're now going to try to run our network with some initial values for our new hyperparameters. These values were many gotten by looking at other people's networks to see what values are used in the commnity at large.
+
+```python
+numChannels = 1
+patch_size = 5
+depth = 16
+```
+
