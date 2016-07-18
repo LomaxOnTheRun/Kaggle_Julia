@@ -87,3 +87,20 @@ depth = 16
 We now get a graph that looks something like this:
 
 ![Graph 1](/images/Julia_6_blog_1.png)
+
+As we can see, the accuracy becomes very good very quickly. However, what the graph doesn't show is that each step now takes significantly longer. No problem there, we can just reduce the amount of steps to something more managable, and increase the frequency of our checks.
+
+```python
+numSteps = 2001
+progressCheckInterval = 50
+```
+
+This now gives us a more informative graph that doesn't take an age for the script to produce.
+
+![Graph 2](/images/Julia_6_blog_2.png)
+
+By adding in the convolution layer, we've managed to increase the accuracy by 5~10% from our previous network. This is great, although the accuracy fluctuates a lot, even after several thousend steps. We'll look at how to reduce this in the next post.
+
+###The full script
+
+You can get the full script [here](/blog/Julia_6.py).
