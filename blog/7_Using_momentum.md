@@ -25,7 +25,14 @@ Since our results have turned into nonsence, we'll run our 10x comparisons again
 
 ![Graph 2](/images/Julia_7_blog_2.png)
 
-We can clearly see that while our value of 0.4 doesn't work, reducing it by a factor of 10, or even 100, does lead to it straightening back out again. We'll now test for values closer to the 0.04 mark, but this time we'll increase the number of steps we take, as it looks like the 0.004 accuracy hadn't stopped improving by the 2000th step.
+We can clearly see that while our value of 0.4 doesn't work, reducing it by a factor of 10, or even 100, does lead to it straightening back out again. It also looks like the 0.004 run didn't get a chance to top out its accuracy, so we're going to run a couple more tests, but this time we'll run them for 3000 steps. Since we're not sure which line is better out of the 0.04 and 0.004, we'll run a set of tests for each one and see what happens.
 
 ![Graph 3](/images/Julia_7_blog_3.png)
 
+![Graph 4](/images/Julia_7_blog_4.png)
+
+So it looks like 0.02 is our best value, and the one we'll procede with.
+
+###The full script
+
+You can get the full script for this post [here](/blog/Julia_7.py).
