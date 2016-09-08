@@ -153,7 +153,6 @@ def runBatchGradientDescent(plot_train_accuracy, plot_valid_accuracy):
 	global_step = tf.Variable(0, trainable=False)
 	learning_rate = tf.train.exponential_decay(0.5, global_step, decay_steps=500, decay_rate=0.5, staircase=True)
 	optimizer = tf.train.AdagradOptimizer(learning_rate, initial_accumulator_value=0.9).minimize(total_loss, global_step=global_step)
-##	optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(total_loss, global_step=global_step)
 
 	# Predictions for the training, validation, and test data.
 	train_prediction = tf.nn.softmax(logits)
