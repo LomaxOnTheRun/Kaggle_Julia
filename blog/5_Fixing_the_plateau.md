@@ -1,10 +1,10 @@
-#Fixing the plateau
+# Fixing the plateau
 
-###Overview
+### Overview
 
 We're going to look at one method of fixing the plateau which occures at the start of the learning process, where the network only (and always) guesses the label 'A' for every image.
 
-###Equalising the data
+### Equalising the data
 
 Since the problem arises from there being many more of some labels than others (most notably, 'A's), we're going to give our network batches compromised of one of each type of label. This way, the network won't be inclined to just guess the most common label, instead causing it to look for other strategies for identifying the images. We'll do this by sorting our images into 'bins', with each bin corresponing to one label.
 
@@ -56,7 +56,7 @@ When we run our new script, we get a graph that looks like this:
 
 This is obviously much worse that before, but with the benefit of not having the validation accuracy stuck at 6.2%. This will help us overcome a major obstacle later on, but if you want to ignore this step for now and continue the tutorial without it, you absolutely can. For the rest of us, let's look at getting our accuracy up again.
 
-###Getting back up to speed
+### Getting back up to speed
 
 We're now going to try to adjust the learning rate hyperparameter to optimise the new setup of the network. To save us time, we're going to assume that the value we have is roughly correct, so we're only going to try doubling and halving them, then fine turning them a little more.
 
@@ -70,6 +70,6 @@ Nope, it looks like 0.4 is indeed our best value. We can now run this for 30,000
 
 ![Graph 4](/images/Julia_5_blog_4.png)
 
-###Full script
+### Full script
 
 You can get the full script for this post [here](/blog/Julia_5.py).
