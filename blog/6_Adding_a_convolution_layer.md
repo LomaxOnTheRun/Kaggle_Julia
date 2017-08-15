@@ -1,10 +1,10 @@
-#Adding a convolution layer
+# Adding a convolution layer
 
-###Overview
+### Overview
 
 We're going to be adding a convolution layer to our network now. This is going to allow the network to create several 'filters' which it will apply to each of the images, and it will be the filtered images which will be put through the 2 hidden layers. Convolution layers are substantially lighter than their hidden layer counterparts, as only the kernels get updated, not every connection weight for every node.
 
-###Adding the layer
+### Adding the layer
 
 As before, the first thing we need to change it the creation of our weights and biases, this time to include the convolution layer. There's 3 extra hyperparameters we need to be aware of:
 
@@ -101,6 +101,6 @@ This now gives us a more informative graph that doesn't take an age for the scri
 
 By adding in the convolution layer, we've managed to increase the accuracy by 5~10% from our previous network. This is great, although the accuracy fluctuates a lot, even after several thousend steps. We'll look at how to reduce this in the next post.
 
-###The full script
+### The full script
 
 You can get the full script [here](/blog/Julia_6.py).
