@@ -1,6 +1,6 @@
-#Building our first neural network
+# Building our first neural network
 
-###Overview
+### Overview
 
 In this post, we'll be creating our first and most basic neural network, using TensorFlow. This is Google's contribution to the field of open-sourced neural network libraries. It uses a C++ backend, which allows for faster computations, although it can make it trickier to use to begin with, and more difficult to implement and tweak your own training algorithms later on. However, for our purposes it will do very well.
 
@@ -11,16 +11,16 @@ I should mention now that there is a lot going on in this script. As with the la
 3. Running the network
 4. Plotting the network accuracy
 
-###Network structure
+### Network structure
 
 For our initial foray into neural networks, we'll stick with an extremely simple structure of just 2 layers:
 
 - **The input layer.** This is simply how we will 'show' the network our images. In this case, it will be a layer 400 nodes wide, one for each pixels in the image.
 - **The output layer.** This is the layer from which we get the networks's assesment of the picture. There are as many output nodes as label IDs, and the output of each node shows how strongly the network believes the image we showed it has a particular ID. So the higher the output of node 10 is, the more strongly the network believes the image is of an '**A**'. Every output node is connected to every input node, and every one of these connections has a weight associated to it. Each node in the output layer also has a bias applied to it, and it is by adjusting these weights and biases that the network 'learns'.
 
-###Loading the pickled data
+### Loading the pickled data
 
-We first of all need to get our data from the pickle file that we created in the [last post] (/blog/Blog_1__Getting_the_training_data.md).
+We first of all need to get our data from the pickle file that we created in the [last post](/blog/Blog_1__Getting_the_training_data.md).
 
 ```python
 import pickle
@@ -57,7 +57,7 @@ If you run the above code, you should get an output that looks like this:
 
 This looks correct, as we decided to put 1000 images aside for validation and testing, and each of the images are 20x20 pixels. The labels are just 1D vectors of IDs.
 
-###Refactoring our datasets and labels
+### Refactoring our datasets and labels
 
 Whilst our network layer has an input node for each pixel in the image, it doesn't actually have a 2D structure like our images have. This means that we need to reshape our each image so that the pixels are represented by a single vector, rather than a 2D matrix.
 
@@ -90,9 +90,9 @@ We can now do another sanity check by running ```checkShapes()``` again, this ti
 >>> Test set: (1000, 400) (1000, 62)
 ```
 
-###Creating the network
+### Creating the network
 
-We're now going to set up the network, using TensorFlow objects. I'll try to explain everything as I go, but if you're still not quite sure what's going on, I recommend going to TensorFlow's [website] (https://www.tensorflow.org/versions/r0.9/tutorials/index.html), which goes over how to build networks for learning MNIST data. I have found these enormously helpful whilst trying to get a handle on using TensorFlow. Anyway, on with the show.
+We're now going to set up the network, using TensorFlow objects. I'll try to explain everything as I go, but if you're still not quite sure what's going on, I recommend going to TensorFlow's [website](https://www.tensorflow.org/versions/r0.9/tutorials/index.html), which goes over how to build networks for learning MNIST data. I have found these enormously helpful whilst trying to get a handle on using TensorFlow. Anyway, on with the show.
 
 The first thing we're going to do is to create placeholders for our batch data. When we train our network, we're going to show it a number of images before letting it backpropagate the error and adjust the weights. Using a placeholder means that a space in memory is allocated to this variable, while allowing us to change its value once the session has started. In this case, we're going to fill these placeholders with sets of images we want to network to learn from.
 
@@ -187,7 +187,7 @@ Finally, we're going to set up a quick way of getting the predictions for datase
 
 A quick note on variable names. You'll probably notice that I've prefaced all of the variables used by TensorFlow with a *tf*. This is to help us remember that we can't just treat them like regular Python variables.
 
-###Running the network
+### Running the network
 
 The bulk of the code to run the network will be in the same function as the code to set up the network, as we're going to need to be able to reference the variables we defined.
 
@@ -253,7 +253,7 @@ Finally, we show how well the final version of our network does at predicting th
 		print "\nTest accuracy: %.1f%%\n" % accuracy(tfTestPrediction.eval(), testLabels)
 ```
 
-###Getting the batch data
+### Getting the batch data
 
 There are a number of ways of doing this, but we're going to randomly select a ```batchSize``` amount of data from our training dataset as our batch data.
 
@@ -266,7 +266,7 @@ def getBatchData():
 	return batchDataset, batchLabels
 ```
 
-###Calculating accuracies
+### Calculating accuracies
 
 We first check to see if the network has found the correct answer, by looking at which ID the network has assigned the highest probability to, then we find the percentage of correct answers the networks has worked out for the dataset in question.
 
@@ -279,7 +279,7 @@ def accuracy(predictions, labels):
 	return (100.0 * numCorrectPredictions / predictions.shape[0])
 ```
 
-###Running the program
+### Running the program
 
 We're now going to run the program, but with a slight twist. We're going to make sure that even if we get bored with our current run, we can still get a graph of what we've done so far. We do this by listening for a ```KeyboardInterrupt```, and dealing with it nicely.
 
@@ -307,7 +307,7 @@ finally:
 	plotGraph(plots)
 ```
 
-###Plotting the accuracies
+### Plotting the accuracies
 
 We can now plot how well our network did at learning to read our images. This is going to be particuarly useful for analysis, as comparing graphs is much easier and more inutitive than looking at long tables of numbers.
 
@@ -325,7 +325,7 @@ def plotGraph(plots):
 	plt.show()
 ```
 
-###Example run
+### Example run
 
 This is an example run of our brand new network, running on my small and not so powerful laptop:
 
@@ -363,6 +363,6 @@ And this is the graph produced:
 
 As you can see, the accuracy we manage to get for our test data keeps improving, while the accuracy for our validation data stops improving relatively early. This is because our simple system begins to learn our training dataset and so gets better at identifying images from it, while it isn't good enough to generalise this knowledge to images it has never seen before. This is called overfitting.
 
-###The full script
+### The full script
 
-The full script for what we've seen today can be found [here] (/blog/Julia_1.py).
+The full script for what we've seen today can be found [here](/blog/Julia_1.py).
