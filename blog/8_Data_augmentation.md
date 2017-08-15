@@ -1,10 +1,10 @@
-#Data augmentation
+# Data augmentation
 
-###Overview
+### Overview
 
 We're going to increase the number of available training data by tweaking images slightly. This will help the network by giving it 'more examples' to work with, as well as stopping it from being able to overfit the training data.
 
-###The code
+### The code
 
 The main differene to our code will come from a function we add which will take the batch of training images we choose, and add a number of possible filters to each one.
 
