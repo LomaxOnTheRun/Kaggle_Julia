@@ -1,10 +1,10 @@
-#Adding a hidden layer
+# Adding a hidden layer
 
-###Overview
+### Overview
 
 In this post, we'll add a hidden layer to our network, improving its capabilites significantly. We'll also look at how to pick hyperparameters with new networks like this.
 
-###The weights and biases
+### The weights and biases
 
 The first change we're going to have to make to our code is to add a matrix and a vector for our new sets of weights and biases respectively. To do this, we simply need to change our ```getWeightsAndBiases()``` function to return several weight matrices and bias vectors. We're going to do this by using dictionaries. This allows us to store them in an efficient way, and then to be able to refer to specific weight and bias matrices by name, making it nicer to read.
 
@@ -22,7 +22,7 @@ def getWeightsAndBiases():
 	return tfWeights, tfBiases
 ```
 
-###The logits
+### The logits
 
 The other function we need to change is how the logits are calculated. We do this by calculating the 'logits' for the hidden layer, then applying a ReLU function to them, then calculating the logits for the output layer from the hidden layer. The ReLU function acts to non-linearise the hidden logits. There are several ways of doing this, but ReLUs are very cheap computationally.
 
@@ -34,11 +34,11 @@ def getLogits(tfBatchDataset, tfWeights, tfBiases):
 	return tfLogits
 ```
 
-###Bits and bobs
+### Bits and bobs
 
 Don't forget to change your graph label from 'Julia 1' to 'Julia 2'.
 
-###Number of hidden layers
+### Number of hidden layers
 
 The sharper eyed readers may have noticed that we snuck in an extra variable, ```numHidden```, in the functions defined above. This is an extra hyperparameter for our network, and is just the amount of nodes we want our hidden layer to have. But how do we choose a new hyperparameter?
 
@@ -52,11 +52,11 @@ As we can see from the graph, the more nodes we have, the better the training an
 
 The other key issue to consider here is the time taken for all of these to run. The network with 10 hidden nodes took about 60s to run, the network with 100 hidden nodes took about 100s to run, and the network with 1000 nodes took about 1400s (roughly 23 minutes) to run. Having our still very basic network take 20 minutes each time we want to run it is far too long, so that one's out. There isn't enough of a difference in time between the other two for it to be a factor, so we'll go with the more successful 100 node network.
 
-###Number of steps
+### Number of steps
 
 In the graph above, we can clearly see the validation accuracy leveling out while the training accuracy keeps getting better. Since we don't actually care about the training validation, beyond using it to see how much overfitting is happening, we want to only train our network for as long as it takes for the validation accuracy to hit it's maximum and level out. Going by the graph, it looks like the validation accuracy completely stopped improving after about 7000 steps. If we wanted to, we could choose to run our network for only 7000 steps, to save us the extra time. However, since *the extra time* is only going to be a few seconds, we can keep the current number of steps as it lets us see if something we change helps it to continue learning after 10,000 steps.
 
-###Refining our hyperparameters
+### Refining our hyperparameters
 
 We can now refine our search of a good hyperparameter (the number of nodes in the hidden layer) by checking the value we've chosen from our previous comparison, with a value 2x smaller than it, and a value 2x larger than it.
 
@@ -70,7 +70,7 @@ This time, we can see that the validation accuracy for the network with 25 hidde
 
 We're now going to use exactly the same methodology to see what values are best for the other two hyper parameter values we've already got in our system: batch size and learning rate.
 
-###Batch size
+### Batch size
 
 We've currently been using the value of 100, but is it the best value for us to use? Let's try running a few checks with values 10x larger and smaller. We're only going to label the colours now, but for each colour, the solid line is for the accuracy on the training data, and the dashed line is the accuracy on the validation data.
 
@@ -82,7 +82,7 @@ So we can see that apart from the batch value of 1, the other all perform about 
 
 Since there is now very little difference in performance, we're going to go with a batch size of 25, as it is the fastest.
 
-###Learning rate
+### Learning rate
 
 Once again, we try a 10x comparison of learning rates.
 
