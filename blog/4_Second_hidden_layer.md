@@ -1,10 +1,10 @@
-#Adding a second hidden layer
+# Adding a second hidden layer
 
-###Overview
+### Overview
 
 We're now going to add a second hidden layer to our neural network, and the problems that arise from doing so.
 
-###Adding the layer
+### Adding the layer
 
 To start with, we're going to keep the same number of nodes in each of our hidden layers, to help keep down the number of hyperparameters to test. We then need to change our code that creates the weights and biases.
 
@@ -45,7 +45,7 @@ Huh, that doesn't look like our normal graph. It looks like the network gets stu
 
 We can see that our network learns in a very similar way to normal, once it's broken through the plateau. So what's getting it stuck?
 
-###Investigating the plateau
+### Investigating the plateau
 
 We can change our code slightly to get a better idea of what's happening in our network. We're going to make the network show us every correct guess it makes.
 
