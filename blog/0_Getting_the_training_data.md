@@ -1,16 +1,16 @@
-#Getting the training data
+# Getting the training data
 
-###Overview
+### Overview
 
 In this session we will download the training data from Kaggle, pre-process it, and then save it to a Pickle file using Python.
 
-###Downloading the data
+### Downloading the data
 
 Kaggle handily offers a 'Data' page for each of its competitions, where you can get the training data, test data, and a few other useful bits and pieces. For this particular competition, there are two sets of training data: one set of raw pictures, each with varying heights and widths, and one that they've resized to 20x20 pixels. As I'm keeping things small to start with, the resized images will do nicely for now. We can always play around with larger images once we've got a network we know works.
 
-So, having gone [here] (https://www.kaggle.com/c/street-view-getting-started-with-julia/data), downloaded the 'trainResized.zip' file and extracted it, we now have a folder full of 20x20 images to work with. Add to that the 'trainLabels.csv' file and we have everything we need for now. In terms of file structure, I keep my image folders and scripts inside the same folder. You don't have to do the same, but you may need to chage the folder names in the code if you decide to use a different folder structure.
+So, having gone [here](https://www.kaggle.com/c/street-view-getting-started-with-julia/data), downloaded the 'trainResized.zip' file and extracted it, we now have a folder full of 20x20 images to work with. Add to that the 'trainLabels.csv' file and we have everything we need for now. In terms of file structure, I keep my image folders and scripts inside the same folder. You don't have to do the same, but you may need to chage the folder names in the code if you decide to use a different folder structure.
 
-###A look at the script
+### A look at the script
 
 We're now ready to crack out our trusty Python and get on with some actual coding. The first thing we'll do is to create a very high level function, which we'll fill in as we go.
 
@@ -33,13 +33,13 @@ def pickleFiles():
 
 This is obviously not yet code we can run - we still need to define all the functions we call. Nonetheless, it's useful insofar as it gives us a clear idea of what we need to do. Just before we get down to creating all of the required functions, we'll take a quick look at why we need validation and test datasets, as well as our training dataset.
 
-###Why do we need validation *and* test datasets?
+### Why do we need validation *and* test datasets?
 
 The reason for having a test dataset is very simple: we need to know how good our network is at identifying images it has *never seen before*. Simply checking how well our network is performing against its training data isn't an accurate test of this, so we need to keep back some images for testing.
 
 The reason for having a validation dataset is slightly more subtle. Whilst we won't ever show the network any of the images from the validation dataset either, we will be using it to monitor the progress of our network, and to change the hyper-parameters of the network accordingly. In this way, some of the information about the validation dataset will bleed through to the network. To stop the same thing from happening to our test dataset, we will only ever run our network against it once, after it has completely finished training.
 
-###Getting the image data
+### Getting the image data
 
 The first of the functions we need to define is ```getImageData()```, which will go through all of the 20x20 images in our trainResized folder, and turn them into a Numpy array. The image files are named 'X.Bmp' where X is a number going from 1 to 6283, which makes it very easy for us to load them in order. Keeping them in this order is very important, as we need them to match up with their corresponding labels in the CSV file.
 
@@ -94,7 +94,7 @@ def getImageData():
 
 Unlike our high level script, this one can actually be run as it is. You just need to add ```getImageData()``` to the bottom of your script, and you should see the dataset stats printed out when you run it.
 
-###Check your images
+### Check your images
 
 We can run a quick check to make sure that our images still look like we expect them to look. All we need to do is run a few more lines of code under the function we've just defined.
 
@@ -112,7 +112,7 @@ for i in xrange(5):
 
 You can also check these against the pictures in the 'trainResized' folder which holds all of the coloured training images. This check is useful as it both checks that the images haven't gotten scrambled somehow, and that they haven't been knocked out of order.
 
-###What's with the pre-processing stuff?
+### What's with the pre-processing stuff?
 
 In addition to flattening the images, we've also carried out two further actions in our ```getImageData``` function:
 
@@ -120,7 +120,7 @@ In addition to flattening the images, we've also carried out two further actions
 
 2. *We restricted the range of values the pixels can take to between -1 and 1.* This will help us to reduce floating point errors. When dealing with floating point numbers (e.g. Python's ```float``` numbers), small rounding errors occur as the processor is not able to hold infinitely long decimal places in memory. This only really starts becoming a problem when trying to calculate tiny differences between very large numbers and, while 255 may not look very large, it becomes problematic when we use large networks with very large matrices. Remember, we'll be trying to squeeze out every possible bit of accuracy from our network, so even a fraction of a percent will make a difference.
 
-###Getting the labels
+### Getting the labels
 
 We can now pull our labels out from the 'trainLabels.csv' we've already downloaded.
 
@@ -175,7 +175,7 @@ def getLabelId(label):
 
 Once again, you can run ```getLabels()``` in both its above forms, and get a list of either alphanumeric labels or numeric label IDs. Note that even once I turn the alphanumeric labels into their numeric IDs, I still choose to call them 'labels' in the code. This is because the alphanumeric labels and their numeric IDs are conceptually equivalent, and so will be used interchangably from here on out.
 
-###Splitting the data
+### Splitting the data
 
 As we mention above, we need to split the data between training, validation and test datasets. I've chosen to do this by specifying the size of the validation and test datasets, and letting the training dataset be compaomised of all of the remaining images. Once again, how you split the data is up to you, but you must make sure that no dataset has any images from any of the other datasets.
 
@@ -200,11 +200,11 @@ def splitData(data, labels, validationSize, testSize):
 
 One thing to note at this point is that I've assumed that the dataset we downloaded is randomly shuffled. You can elect to shuffle the data further still to make sure this is the case, but I've decided not to do this here as I wanted to have recreatable validation and test datasets. The reason for this is to enable you to get very similar accuracies to what I've gotten, by running the code I've posted.
 
-###How much training / validation / test data do we need?
+### How much training / validation / test data do we need?
 
 In an ideal world, as much of all three as possible. However, since that is almost never the case, we normally have to look at the best ways of divvying up the available data into training, validation and test datasets. The basic idea is that we want as much data as possible in our training dataset (allowing it to become as good as possible), whilst still having enough data in each of our other datasets to be able to get a good idea of the network's accuracy. The general rule of thumb is to have somewhere between 10% and 20% of your data in each of your validation and test sets.
 
-###Saving the data
+### Saving the data
 
 We now get to the final part of our script; saving our data as a Pickle file, also referred to as *pickling* the data. Pickling data allows us to store data in a compressed format, whilst keeping their Python and Numpy data structures.
 
@@ -237,7 +237,7 @@ def saveData(pickleFile, imageData, labels):
 
 And there we have it, all the pieces we need to download, preprocess and store the data we'll be using for our networks. We shouldn't have to mess around with this script any more, at least for as long as we're happy using 20x20 images. Just before we make our first neural network, I did want to mention something I've found extraordinarily useful throughout my coding career.
 
-###Sanity checks
+### Sanity checks
 
 When I talk about sanity checks, I am referring to the quick and easy checks we can run to make sure that the code is doing, well, *sane* things. We've already done this a couple of times throughout this script, checking that the images and labels made sense after manipulating them. We're now going to make sure they've also been stored properly, by loading them from our Pickle file and looking at them again.
 
@@ -278,6 +278,6 @@ Performing these sanity checks frequently will stop you from making stupid mista
 
 My first encounter with this was when I failed to check the images were being imported in the correct order, and I ended up with labels being put on random images. It took me a day and a half to work out why my network just kept guessing the most common training letter, 'A', when I finally ran a sanity check to make sure my images and labels matched up. Sanity checks might seem like a nuicance at the time, but if you get into the habit of doing them as you go along, you'll save yourself a world of problems.
 
-###The full script
+### The full script
 
 [Here](/blog/Julia_pickle.py)'s the link to the full script of everything we've looked at in this post.
