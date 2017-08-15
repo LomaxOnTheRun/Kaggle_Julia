@@ -1,10 +1,10 @@
-#Using momentum
+# Using momentum
 
-###Overview
+### Overview
 
 In the last post we got good results, but a very unstable accuracy. In this post, we'll look at how to use momentum to help keep our network accuracy more stable.
 
-###Adding momentum
+### Adding momentum
 
 To add momentum to our system, we need to change our ```tf.train.GradientDescentOptimizer``` with a ```tf.train.MomentumOptimizer```.
 
@@ -33,6 +33,6 @@ We can clearly see that while our value of 0.4 doesn't work, reducing it by a fa
 
 So it looks like 0.02 is our best value, and the one we'll procede with.
 
-###The full script
+### The full script
 
 You can get the full script for this post [here](/blog/Julia_7.py).
